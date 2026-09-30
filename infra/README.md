@@ -55,9 +55,21 @@ Needs an AWS profile with admin rights. The `montania-deploy` role can only sync
 
 ## Local development
 
-`npm run dev` serves `/data/*` and `/media/*` from `seed/`. Only public pages use these files.
-`/admin` always talks to the real API. To use it locally, create `.env.development.local` with the
-same values as `.env.production`, plus `VITE_MEDIA_BASE=https://composytex.com`.
+**Full local stack (recommended for testing /admin):**
+
+```bash
+npm run local            # keeps state in .local-stack/
+npm run local -- --reset # start again from a fresh copy of seed/
+```
+
+This runs the real Lambda handler behind a local API on `:8787`, with S3 stored in
+`.local-stack/`, a fake Cognito and a fake Translate that prefixes `[EN] `. It also runs
+Vite, which serves the site from the same `.local-stack/` folder, so admin edits show up
+on the public pages right away. Nothing reaches AWS. The terminal prints the test login
+(defined in `scripts/local-stack.mjs`). The first login asks for a new password, like
+production. For "forgot password", the reset code is printed in the terminal.
+
+**Plain `npm run dev`** serves `/data/*` and `/media/*` from `seed/` (public pages only).
 
 `seed/data/catalog.json` is only the initial content. After seeding, the live catalog in S3 is the
 source of truth.

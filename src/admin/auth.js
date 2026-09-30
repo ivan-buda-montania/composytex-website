@@ -1,6 +1,4 @@
-import { COGNITO_CLIENT_ID, COGNITO_REGION } from './config';
-
-const ENDPOINT = `https://cognito-idp.${COGNITO_REGION}.amazonaws.com/`;
+import { COGNITO_CLIENT_ID, COGNITO_ENDPOINT as ENDPOINT } from './config';
 const STORAGE_KEY = 'composytex-admin-session';
 
 const ERROR_MESSAGES = {
