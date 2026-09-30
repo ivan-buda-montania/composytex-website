@@ -1,7 +1,8 @@
 import { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
-import { materialsCards } from '../data/products';
+import { useCatalog } from '../context/catalogContext';
+import { matchesQuery } from '../lib/catalog';
 import ServiceCard from '../components/ServiceCard';
 import SearchBar from '../components/SearchBar';
 
@@ -9,6 +10,7 @@ export default function MaterialsPage() {
   const { t } = useLanguage();
   const [query, setQuery] = useState('');
   const [activeTag, setActiveTag] = useState('all');
+  const { status, products } = useCatalog('materials');
 
   const TAGS = [
     { id: 'all', label: t('filterTags.all') },
@@ -19,14 +21,9 @@ export default function MaterialsPage() {
     { id: 'dental', label: t('filterTags.dental') },
   ];
 
-  const filtered = useMemo(() => {
-    const q = query.toLowerCase().trim();
-    return materialsCards.filter(card => {
-      const matchesQuery = !q || card.searchTerms.includes(q) || card.name.toLowerCase().includes(q);
-      const matchesTag = activeTag === 'all' || card.tags.includes(activeTag);
-      return matchesQuery && matchesTag;
-    });
-  }, [query, activeTag]);
+  const filtered = useMemo(() => products.filter(product =>
+    matchesQuery(product, query) && (activeTag === 'all' || product.tags.includes(activeTag))
+  ), [products, query, activeTag]);
 
   return (
     <>
@@ -64,10 +61,16 @@ export default function MaterialsPage() {
 
       <div className="products-wrap">
         <div className="cards-grid">
-          {filtered.map(card => (
-            <ServiceCard key={card.id} {...card} />
+          {filtered.map(product => (
+            <ServiceCard key={product.id} product={product} />
           ))}
-          {filtered.length === 0 && (
+          {status !== 'ready' && (
+            <div className="no-results">
+              <i className={status === 'loading' ? 'fas fa-spinner fa-spin' : 'fas fa-triangle-exclamation'}></i>
+              <p>{t(status === 'loading' ? 'catalog.loading' : 'catalog.error')}</p>
+            </div>
+          )}
+          {status === 'ready' && filtered.length === 0 && (
             <div className="no-results">
               <i className="fas fa-search"></i>
               <h3>{t('noResults.title')}</h3>

@@ -162,67 +162,13 @@ export const translations = {
       viewDetails: 'View details',
       viewAll: 'View All',
     },
-    productDescriptions: {
-      peristalticFillers: {
-        name: 'Peristaltic Fillers',
-        desc: 'Precision peristaltic pumping for sensitive liquids. Minimal aeration.',
-      },
-      reactors: {
-        name: 'Reactors',
-        desc: 'Magnetic stirring, sanitary design. For laboratory and production scale.',
-      },
-      cappingSealing: {
-        name: 'Capping & Sealing',
-        desc: 'Automatic machines for flip-off capsules, sealing vials and bottles.',
-      },
-      qualityControl: {
-        name: 'Quality Control',
-        desc: 'Ampule inspectors, VITEK-MS spectrometry with Shimadzu.',
-      },
-      foodFreezeDryer: {
-        name: 'Food Freeze Dryer',
-        desc: 'Freeze drying of food, fruits, vegetables. Preserves nutrients and flavor.',
-      },
-      pharmaFreezeDryer: {
-        name: 'Pharma Freeze Dryer',
-        desc: 'Freeze drying of biologicals, vaccines and pharmaceuticals. Certified.',
-      },
-      vialFillingCapping: {
-        name: 'Vial Filling & Capping',
-        desc: 'Automatic system for filling vials and placing/crimping caps or seals.',
-      },
-      conveyorBelts: {
-        name: 'Conveyor Belts',
-        desc: 'Modular conveyor belts for production lines. Stainless steel, sanitary grade.',
-      },
-      co2Incubators: {
-        name: 'CO₂ Incubators',
-        desc: 'Precise temperature and CO₂ control for cell and microbiological cultures.',
-      },
-      suctionHoses: {
-        name: 'Suction Hoses',
-        desc: 'Reinforced & flexible for water, air, vapors and powders. Agricultural and industrial sector.',
-      },
-      polyurethaneTubing: {
-        name: 'Polyurethane Tubing',
-        desc: '–40°C to +100°C. For medical and dental equipment, resistant to oils and chemicals.',
-      },
-      pvcPolyethylene: {
-        name: 'Flexible PVC & Polyethylene',
-        desc: 'FDA non-toxic grade, 125–300 PSI. Transparent or colored for automation systems.',
-      },
-      nylonTubing: {
-        name: 'Nylon Tubing',
-        desc: 'Up to 300 PSI, low moisture absorption. Resistant to hydraulic fluids and oils.',
-      },
-      dentalHoses: {
-        name: 'Dental Hoses',
-        desc: 'Ejector, handpiece, water/air lines and complete flush system assemblies.',
-      },
-      pneumaticHoses: {
-        name: 'Pneumatic Hoses',
-        desc: 'Air, liquid and gas flow. Laboratory equipment, robotics, and precision systems.',
-      },
+    categories: {
+      machinery: 'Specialized Machinery',
+      materials: 'Specialized Materials',
+    },
+    catalog: {
+      loading: 'Loading catalog…',
+      error: 'The catalog could not be loaded. Please try again later.',
     },
   },
   es: {
@@ -388,67 +334,13 @@ export const translations = {
       viewDetails: 'Ver detalles',
       viewAll: 'Ver Todo',
     },
-    productDescriptions: {
-      peristalticFillers: {
-        name: 'Dosificadores Peristálticos',
-        desc: 'Bombeo peristáltico de precisión para líquidos sensibles. Mínima aireación.',
-      },
-      reactors: {
-        name: 'Reactores',
-        desc: 'Agitación magnética, diseño sanitario. Para escala de laboratorio y producción.',
-      },
-      cappingSealing: {
-        name: 'Capeado y Sellado',
-        desc: 'Máquinas automáticas para cápsulas flip-off, sellado de viales y botellas.',
-      },
-      qualityControl: {
-        name: 'Control de Calidad',
-        desc: 'Inspectores de ampollas, espectrometría VITEK-MS con Shimadzu.',
-      },
-      foodFreezeDryer: {
-        name: 'Liofilizador de Alimentos',
-        desc: 'Liofilización de alimentos, frutas, verduras. Preserva nutrientes y sabor.',
-      },
-      pharmaFreezeDryer: {
-        name: 'Liofilizador Farmacéutico',
-        desc: 'Liofilización de productos biológicos, vacunas y productos farmacéuticos. Certificado.',
-      },
-      vialFillingCapping: {
-        name: 'Llenado y Capeado de Viales',
-        desc: 'Sistema automático para llenar viales y colocar/prensar tapas o sellos.',
-      },
-      conveyorBelts: {
-        name: 'Bandas Transportadoras',
-        desc: 'Bandas transportadoras modulares para líneas de producción. Acero inoxidable, grado sanitario.',
-      },
-      co2Incubators: {
-        name: 'Incubadores de CO₂',
-        desc: 'Control preciso de temperatura y CO₂ para cultivos celulares y microbiológicos.',
-      },
-      suctionHoses: {
-        name: 'Mangueras de Succión',
-        desc: 'Reforzadas y flexibles para agua, aire, vapores y polvos. Sector agrícola e industrial.',
-      },
-      polyurethaneTubing: {
-        name: 'Tuberías de Poliuretano',
-        desc: '–40°C a +100°C. Para equipos médicos y dentales, resistente a aceites y químicos.',
-      },
-      pvcPolyethylene: {
-        name: 'PVC Flexible y Polietileno',
-        desc: 'Grado no tóxico aprobado por FDA, 125–300 PSI. Transparente o coloreado para sistemas de automatización.',
-      },
-      nylonTubing: {
-        name: 'Tuberías de Nylon',
-        desc: 'Hasta 300 PSI, baja absorción de humedad. Resistente a fluidos hidráulicos y aceites.',
-      },
-      dentalHoses: {
-        name: 'Mangueras Dentales',
-        desc: 'Eyector, pieza de mano, líneas de agua/aire y conjuntos completos de sistema de enjuague.',
-      },
-      pneumaticHoses: {
-        name: 'Mangueras Neumáticas',
-        desc: 'Flujo de aire, líquido y gas. Equipos de laboratorio, robótica y sistemas de precisión.',
-      },
+    categories: {
+      machinery: 'Maquinaria Especializada',
+      materials: 'Materiales Especializados',
+    },
+    catalog: {
+      loading: 'Cargando catálogo…',
+      error: 'No se pudo cargar el catálogo. Intenta de nuevo más tarde.',
     },
   },
 };

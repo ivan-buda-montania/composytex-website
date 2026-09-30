@@ -1,47 +1,32 @@
 import { useEffect } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
-import { products, PHONE, EMAIL } from '../data/products';
-
-// Map product IDs to translation keys
-const PRODUCT_TRANSLATION_MAP = {
-  'fillers': 'peristalticFillers',
-  'reactors': 'reactors',
-  'capping-sealing': 'cappingSealing',
-  'quality-control': 'qualityControl',
-  'food-freeze-dryer': 'foodFreezeDryer',
-  'pharma-freeze-dryer': 'pharmaFreezeDryer',
-  'vial-filling-capping': 'vialFillingCapping',
-  'conveyor-belts': 'conveyorBelts',
-  'co2-incubators': 'co2Incubators',
-  'peristaltic-fillers': 'peristalticFillers',
-  'suction-hoses': 'suctionHoses',
-  'polyurethane-tubing': 'polyurethaneTubing',
-  'flexible-pvc': 'pvcPolyethylene',
-  'nylon-tubing': 'nylonTubing',
-  'dental-hoses': 'dentalHoses',
-  'pneumatic-hoses': 'pneumaticHoses',
-};
+import { useCatalog } from '../context/catalogContext';
+import { localize, TAG_KEYS } from '../lib/catalog';
+import { PHONE, EMAIL } from '../data/contact';
 
 export default function ProductDetailPage() {
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
   const [searchParams] = useSearchParams();
   const id = searchParams.get('id');
-  const product = products[id];
-
-  // Get translated product name and lead
-  const translationKey = PRODUCT_TRANSLATION_MAP[id];
-  const translatedName = translationKey ? t(`productDescriptions.${translationKey}.name`) : product?.name;
-  const translatedDesc = translationKey ? t(`productDescriptions.${translationKey}.desc`) : product?.lead;
+  const { status, products } = useCatalog();
+  const found = products.find(p => p.id === id);
+  const product = found && localize(found, lang);
+  const name = product?.name;
 
   useEffect(() => {
-    if (product) {
-      document.title = `${product.name} · Composytex`;
-    } else {
-      document.title = 'Product Not Found · Composytex';
-    }
+    if (status === 'loading') return;
+    document.title = name ? `${name} · Composytex` : 'Product Not Found · Composytex';
     return () => { document.title = 'Composytex · Pharmaceutical Engineering'; };
-  }, [product]);
+  }, [status, name]);
+
+  if (status === 'loading') {
+    return (
+      <div style={{ textAlign: 'center', padding: '8rem 2rem', color: 'var(--muted)' }}>
+        <i className="fas fa-spinner fa-spin" style={{ fontSize: '2rem' }}></i>
+      </div>
+    );
+  }
 
   if (!product) {
     return (
@@ -56,13 +41,14 @@ export default function ProductDetailPage() {
     );
   }
 
-  const isMaterial = product.category.includes('Materials');
+  const isMaterial = product.section === 'materials';
+  const category = t(`categories.${product.section}`);
   const productPageUrl = `${window.location.origin}/products?id=${id}`;
-  const waMessage = t('productDetail.waMessage').replace('{product}', translatedName) + `\n\n${t('productDetail.waProductPage')} ${productPageUrl}`;
+  const waMessage = t('productDetail.waMessage').replace('{product}', product.name) + `\n\n${t('productDetail.waProductPage')} ${productPageUrl}`;
   const waText = encodeURIComponent(waMessage);
   const waLink = `https://wa.me/${PHONE}?text=${waText}`;
-  const mailSub = encodeURIComponent(t('productDetail.emailSubject').replace('{product}', translatedName));
-  const mailBody = encodeURIComponent(t('productDetail.emailBody').replace('{product}', translatedName));
+  const mailSub = encodeURIComponent(t('productDetail.emailSubject').replace('{product}', product.name));
+  const mailBody = encodeURIComponent(t('productDetail.emailBody').replace('{product}', product.name));
 
   return (
     <>
@@ -70,9 +56,9 @@ export default function ProductDetailPage() {
       <div style={{ maxWidth: 1100, margin: '0 auto', padding: '1.2rem 3rem 0', display: 'flex', alignItems: 'center', gap: '0.6rem', fontSize: '0.85rem', color: 'var(--muted)' }}>
         <Link to="/" style={{ color: 'var(--blue)', textDecoration: 'none', fontWeight: 600 }}>{t('breadcrumb.home')}</Link>
         <i className="fas fa-chevron-right" style={{ fontSize: '0.7rem', color: '#9ab5cc' }}></i>
-        <Link to={isMaterial ? '/materials' : '/machinery'} style={{ color: 'var(--blue)', textDecoration: 'none', fontWeight: 600 }}>{product.category}</Link>
+        <Link to={isMaterial ? '/materials' : '/machinery'} style={{ color: 'var(--blue)', textDecoration: 'none', fontWeight: 600 }}>{category}</Link>
         <i className="fas fa-chevron-right" style={{ fontSize: '0.7rem', color: '#9ab5cc' }}></i>
-        <span>{translatedName}</span>
+        <span>{product.name}</span>
       </div>
 
       {/* Product Hero */}
@@ -82,12 +68,12 @@ export default function ProductDetailPage() {
             <i className={product.icon}></i>
           </div>
           <div>
-            <span style={{ display: 'inline-block', color: 'var(--blue)', fontSize: '0.78rem', fontWeight: 700, letterSpacing: '1.5px', textTransform: 'uppercase', marginBottom: '0.5rem' }}>{product.category}</span>
-            <h1 style={{ fontSize: '2.6rem', fontWeight: 900, letterSpacing: -1, lineHeight: 1.15, marginBottom: '0.8rem', color: 'var(--navy)' }}>{translatedName}</h1>
-            <p style={{ fontSize: '1.1rem', color: 'var(--muted)', maxWidth: 650, lineHeight: 1.7, marginBottom: '1.2rem' }}>{translatedDesc}</p>
+            <span style={{ display: 'inline-block', color: 'var(--blue)', fontSize: '0.78rem', fontWeight: 700, letterSpacing: '1.5px', textTransform: 'uppercase', marginBottom: '0.5rem' }}>{category}</span>
+            <h1 style={{ fontSize: '2.6rem', fontWeight: 900, letterSpacing: -1, lineHeight: 1.15, marginBottom: '0.8rem', color: 'var(--navy)' }}>{product.name}</h1>
+            <p style={{ fontSize: '1.1rem', color: 'var(--muted)', maxWidth: 650, lineHeight: 1.7, marginBottom: '1.2rem' }}>{product.lead}</p>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.4rem' }}>
-              {product.tags.map(([cls, label]) => (
-                <span key={cls} className={`app-tag ${cls}`}>{label}</span>
+              {product.tags.map(tag => (
+                <span key={tag} className={`app-tag ${tag}`}>{t(TAG_KEYS[tag])}</span>
               ))}
             </div>
           </div>
@@ -95,12 +81,12 @@ export default function ProductDetailPage() {
       </div>
 
       {/* Product Image Section */}
-      {id === 'co2-incubators' && (
+      {product.image && (
         <div style={{ background: '#f4f9fe', padding: '2rem 3rem', borderTop: '1px solid #dce9f4', borderBottom: '1px solid #dce9f4' }}>
           <div style={{ maxWidth: 1100, margin: '0 auto' }}>
             <img
-              src="https://drive.google.com/thumbnail?id=14IDzHfj45bozlMDGiBhuot34Tf8sIau2&sz=w1000"
-              alt="CO2 Incubator"
+              src={product.image}
+              alt={product.name}
               style={{
                 width: '100%',
                 maxWidth: 700,
@@ -125,7 +111,9 @@ export default function ProductDetailPage() {
             <h2 style={{ fontSize: '1.2rem', fontWeight: 800, color: 'var(--navy)', marginBottom: '1.2rem', paddingBottom: '0.6rem', borderBottom: '2px solid #e4eff8', display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
               <i className="fas fa-align-left" style={{ color: 'var(--blue)', fontSize: '1rem' }}></i> {t('productDetail.overview')}
             </h2>
-            <div style={{ color: '#2e4a5f', lineHeight: 1.8, fontSize: '0.97rem' }} dangerouslySetInnerHTML={{ __html: product.description }} />
+            <div style={{ color: '#2e4a5f', lineHeight: 1.8, fontSize: '0.97rem' }}>
+              {product.description.map((paragraph, i) => <p key={i}>{paragraph}</p>)}
+            </div>
           </div>
 
           {/* Features */}

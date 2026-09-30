@@ -1,10 +1,11 @@
 import { Link } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
-import { machineryCards, materialsCards } from '../data/products';
+import { useCatalog } from '../context/catalogContext';
 import ServiceCard from '../components/ServiceCard';
 
 export default function HomePage() {
   const { t } = useLanguage();
+  const { products } = useCatalog();
   return (
     <>
       {/* ── HERO ── */}
@@ -130,8 +131,8 @@ export default function HomePage() {
             </Link>
           </div>
           <div className="cards-grid">
-            {machineryCards.map(card => (
-              <ServiceCard key={card.id} {...card} />
+            {products.filter(p => p.section === 'machinery').map(product => (
+              <ServiceCard key={product.id} product={product} />
             ))}
           </div>
         </div>
@@ -151,8 +152,8 @@ export default function HomePage() {
             </Link>
           </div>
           <div className="cards-grid">
-            {materialsCards.map(card => (
-              <ServiceCard key={card.id} {...card} />
+            {products.filter(p => p.section === 'materials').map(product => (
+              <ServiceCard key={product.id} product={product} />
             ))}
           </div>
         </div>

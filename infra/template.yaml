@@ -1,0 +1,183 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: Composytex catalog admin — Cognito login, HTTP API + Lambda that edits the catalog stored in the website bucket.
+
+Parameters:
+  WebsiteBucket:
+    Type: String
+    Default: composytex-website
+  WebsiteBucketRegion:
+    Type: String
+    Default: us-east-2
+  DistributionId:
+    Type: String
+    Default: EDLEB3DROGP6X
+  AllowedOrigins:
+    Type: CommaDelimitedList
+    Default: https://composytex.com,https://www.composytex.com,http://localhost:5173
+
+Globals:
+  Function:
+    Runtime: nodejs22.x
+    Architectures: [arm64]
+    MemorySize: 512
+    Timeout: 30
+
+Resources:
+  # ── Auth: a single superadmin, no self sign-up ────────────────────────────
+  AdminUserPool:
+    Type: AWS::Cognito::UserPool
+    Properties:
+      UserPoolName: composytex-admin
+      AdminCreateUserConfig:
+        AllowAdminCreateUserOnly: true
+      UsernameAttributes: [email]
+      AutoVerifiedAttributes: [email]
+      AccountRecoverySetting:
+        RecoveryMechanisms:
+          - Name: verified_email
+            Priority: 1
+      Policies:
+        PasswordPolicy:
+          MinimumLength: 12
+          RequireLowercase: true
+          RequireUppercase: true
+          RequireNumbers: true
+          RequireSymbols: false
+      UserPoolTier: LITE
+
+  AdminUserPoolClient:
+    Type: AWS::Cognito::UserPoolClient
+    Properties:
+      UserPoolId: !Ref AdminUserPool
+      ClientName: composytex-admin-web
+      GenerateSecret: false
+      ExplicitAuthFlows:
+        - ALLOW_USER_PASSWORD_AUTH
+        - ALLOW_REFRESH_TOKEN_AUTH
+      PreventUserExistenceErrors: ENABLED
+      AccessTokenValidity: 1
+      IdTokenValidity: 1
+      RefreshTokenValidity: 7
+      TokenValidityUnits:
+        AccessToken: hours
+        IdToken: hours
+        RefreshToken: days
+
+  # ── API ───────────────────────────────────────────────────────────────────
+  AdminApi:
+    Type: AWS::Serverless::HttpApi
+    Properties:
+      CorsConfiguration:
+        AllowOrigins: !Ref AllowedOrigins
+        AllowMethods: [GET, PUT, POST, DELETE, OPTIONS]
+        AllowHeaders: [authorization, content-type]
+        MaxAge: 600
+      Auth:
+        DefaultAuthorizer: CognitoJwt
+        Authorizers:
+          CognitoJwt:
+            IdentitySource: $request.header.Authorization
+            JwtConfiguration:
+              issuer: !Sub https://cognito-idp.${AWS::Region}.amazonaws.com/${AdminUserPool}
+              audience:
+                - !Ref AdminUserPoolClient
+      DefaultRouteSettings:
+        ThrottlingBurstLimit: 20
+        ThrottlingRateLimit: 10
+
+  CatalogFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src/
+      Handler: handler.handler
+      Environment:
+        Variables:
+          BUCKET: !Ref WebsiteBucket
+          BUCKET_REGION: !Ref WebsiteBucketRegion
+          DISTRIBUTION_ID: !Ref DistributionId
+      Policies:
+        - Statement:
+            - Effect: Allow
+              Action: [s3:GetObject, s3:PutObject, s3:DeleteObject]
+              Resource:
+                - !Sub arn:aws:s3:::${WebsiteBucket}/data/*
+                - !Sub arn:aws:s3:::${WebsiteBucket}/media/*
+            # Lets S3 answer 404 (not 403) when the catalog does not exist yet.
+            - Effect: Allow
+              Action: s3:ListBucket
+              Resource: !Sub arn:aws:s3:::${WebsiteBucket}
+              Condition:
+                StringLike:
+                  s3:prefix: data/*
+            - Effect: Allow
+              Action: cloudfront:CreateInvalidation
+              Resource: !Sub arn:aws:cloudfront::${AWS::AccountId}:distribution/${DistributionId}
+            - Effect: Allow
+              Action: translate:TranslateText
+              Resource: '*'
+      Events:
+        GetCatalog:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref AdminApi
+            Method: GET
+            Path: /catalog
+        PutProduct:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref AdminApi
+            Method: PUT
+            Path: /products/{id}
+        DeleteProduct:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref AdminApi
+            Method: DELETE
+            Path: /products/{id}
+        PutOrder:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref AdminApi
+            Method: PUT
+            Path: /order
+        UploadMedia:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref AdminApi
+            Method: POST
+            Path: /media
+
+  CatalogFunctionLogs:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub /aws/lambda/${CatalogFunction}
+      RetentionInDays: 30
+
+  # ── SPA routing: serve index.html for extensionless paths (/admin, /machinery…)
+  # Must be attached once to the distribution's default behavior (viewer request).
+  SpaRewriteFunction:
+    Type: AWS::CloudFront::Function
+    Properties:
+      Name: composytex-spa-rewrite
+      AutoPublish: true
+      FunctionConfig:
+        Comment: Rewrite client-side routes to /index.html
+        Runtime: cloudfront-js-2.0
+      FunctionCode: |
+        function handler(event) {
+          var req = event.request;
+          var last = req.uri.split('/').pop();
+          if (last.indexOf('.') === -1) req.uri = '/index.html';
+          return req;
+        }
+
+Outputs:
+  ApiUrl:
+    Value: !Sub https://${AdminApi}.execute-api.${AWS::Region}.amazonaws.com
+  UserPoolId:
+    Value: !Ref AdminUserPool
+  UserPoolClientId:
+    Value: !Ref AdminUserPoolClient
+  SpaRewriteFunctionArn:
+    Value: !GetAtt SpaRewriteFunction.FunctionARN
