@@ -19,7 +19,34 @@ composytex.com ── CloudFront ──┬─ /*                  → S3 site bu
 - **Images** are resized in the browser (max 1600 px, WebP), uploaded through the API, and deleted
   from S3 once no product references them.
 
-## One-time setup
+## CI/CD (GitHub Actions)
+
+| Workflow | Trigger | Does |
+|---|---|---|
+| `ci.yml` | pull requests (and called by Deploy) | lint, `npm test` (Lambda tests), build, `sam validate --lint` |
+| `deploy.yml` | push to `main` (not `*.md`-only), or *Run workflow* | checks → `sam deploy` of `composytex-admin` → `./deploy.sh` for the site → smoke test |
+
+There are no AWS keys in GitHub. The workflow assumes `composytex-github-deploy` through OIDC.
+Only jobs running in this repo's `production` environment can do that, and that environment
+only accepts `main`. The role can sync the site (it's explicitly denied `data/*` and `media/*`),
+clear the CloudFront cache, and ask CloudFormation to update `composytex-admin` using
+`composytex-cfn-exec`, the role that actually changes Lambda, API, Cognito, etc. Both roles are
+defined in `infra/github-actions.yaml`. The admin user pool has `DeletionPolicy: Retain`, so
+no deploy can delete the admin account.
+
+Bootstrap, run once by hand with admin credentials:
+```bash
+aws cloudformation deploy --profile <admin-profile> --region us-east-1 \
+  --stack-name composytex-github-actions --template-file infra/github-actions.yaml --capabilities CAPABILITY_NAMED_IAM
+gh api -X PUT repos/ivan-buda-montania/composytex-website/environments/production \
+  -F 'deployment_branch_policy[protected_branches]=false' -F 'deployment_branch_policy[custom_branch_policies]=true'
+gh api -X POST repos/ivan-buda-montania/composytex-website/environments/production/deployment-branch-policies -f name=main
+```
+
+To deploy by hand (fallback): `scripts/write-env.sh` (admin profile) then `./deploy.sh`, and
+`cd infra && sam build && sam deploy --profile <admin-profile> --role-arn arn:aws:iam::508587295478:role/composytex-cfn-exec`.
+
+## One-time setup (already done for production)
 
 Needs an AWS profile with admin rights. The `montania-deploy` role can only sync the site.
 

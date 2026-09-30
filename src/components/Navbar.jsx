@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { useLanguage } from '../context/LanguageContext';
+import { useLanguage } from '../context/languageContext';
 
 export default function Navbar() {
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -32,10 +32,13 @@ export default function Navbar() {
     return () => document.removeEventListener('click', handleClick);
   }, []);
 
-  useEffect(() => {
+  // Close menus on navigation (state adjusted during render, not in an effect).
+  const [menuPath, setMenuPath] = useState(location.pathname);
+  if (menuPath !== location.pathname) {
+    setMenuPath(location.pathname);
     setDropdownOpen(false);
     setMobileOpen(false);
-  }, [location.pathname]);
+  }
 
   // Prevent body scroll when mobile menu is open
   useEffect(() => {

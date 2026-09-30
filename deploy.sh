@@ -1,15 +1,19 @@
 #!/usr/bin/env bash
-set -e
+# Builds the site and publishes it. Used by GitHub Actions (credentials from OIDC)
+# and by hand as a fallback (uses the montania-deploy profile).
+set -euo pipefail
 
-export AWS_PROFILE=montania-deploy
+if [[ -z "${CI:-}" ]]; then
+  export AWS_PROFILE=montania-deploy
+fi
 export AWS_REGION=us-east-1
 
 if [[ ! -f .env.production ]]; then
-  echo "Missing .env.production (copy .env.example and fill it from the SAM stack outputs)." >&2
+  echo "Missing .env.production (run scripts/write-env.sh or copy .env.example)." >&2
   exit 1
 fi
 
 npm run build
 # data/ and media/ hold the catalog managed from /admin — never delete or overwrite them here.
 aws s3 sync dist/ s3://composytex-website --delete --exclude "data/*" --exclude "media/*"
-aws cloudfront create-invalidation --distribution-id EDLEB3DROGP6X --paths "/*"
+aws cloudfront create-invalidation --distribution-id EDLEB3DROGP6X --paths "/*" --query Invalidation.Id --output text

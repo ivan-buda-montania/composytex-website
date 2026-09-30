@@ -1,4 +1,4 @@
-import { useLanguage } from '../context/LanguageContext';
+import { useLanguage } from '../context/languageContext';
 
 export default function SearchBar({ query, onQuery, activeTag, onTag, count, tags, placeholder }) {
   const { t } = useLanguage();

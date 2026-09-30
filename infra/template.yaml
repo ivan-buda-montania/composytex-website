@@ -27,6 +27,9 @@ Resources:
   # ── Auth: a single superadmin, no self sign-up ────────────────────────────
   AdminUserPool:
     Type: AWS::Cognito::UserPool
+    # Never let an automated deploy drop the admin account.
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
     Properties:
       UserPoolName: composytex-admin
       AdminCreateUserConfig:

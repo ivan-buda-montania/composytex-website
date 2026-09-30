@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { useLanguage } from '../context/LanguageContext';
+import { useLanguage } from '../context/languageContext';
 import { localize, TAG_KEYS } from '../lib/catalog';
 
 export default function ServiceCard({ product }) {

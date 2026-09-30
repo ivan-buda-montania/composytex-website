@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
-import { useLanguage } from '../context/LanguageContext';
+import { useLanguage } from '../context/languageContext';
 import { useCatalog } from '../context/catalogContext';
 import { localize, TAG_KEYS } from '../lib/catalog';
 import { PHONE, EMAIL } from '../data/contact';

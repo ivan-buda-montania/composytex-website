@@ -1,0 +1,93 @@
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - '**.md'
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+env:
+  AWS_REGION: us-east-1
+  DEPLOY_ROLE: arn:aws:iam::508587295478:role/composytex-github-deploy
+  CFN_EXEC_ROLE: arn:aws:iam::508587295478:role/composytex-cfn-exec
+
+jobs:
+  checks:
+    uses: ./.github/workflows/ci.yml
+
+  backend:
+    needs: checks
+    runs-on: ubuntu-latest
+    environment: production
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - uses: aws-actions/setup-sam@v2
+        with:
+          use-installer: true
+
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ env.DEPLOY_ROLE }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Deploy composytex-admin stack
+        working-directory: infra
+        run: |
+          sam build
+          sam deploy --no-confirm-changeset --no-fail-on-empty-changeset --role-arn "$CFN_EXEC_ROLE"
+
+  site:
+    needs: backend
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+      url: https://composytex.com
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ env.DEPLOY_ROLE }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - run: scripts/write-env.sh
+      - run: ./deploy.sh
+
+      - name: Smoke test
+        run: |
+          set -euo pipefail
+          for path in / /machinery /admin "/products?id=fillers" /data/catalog.json; do
+            code=$(curl -s -o /dev/null -w '%{http_code}' "https://composytex.com$path")
+            echo "$path → $code"
+            [ "$code" = 200 ]
+          done
+          api=$(grep VITE_API_URL .env.production | cut -d= -f2)
+          code=$(curl -s -o /dev/null -w '%{http_code}' "$api/catalog")
+          echo "API without login → $code"
+          [ "$code" = 401 ]

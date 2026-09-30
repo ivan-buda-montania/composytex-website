@@ -8,7 +8,8 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "local": "node scripts/local-stack.mjs"
+    "local": "node scripts/local-stack.mjs",
+    "test": "node --test infra/test/*.test.mjs"
   },
   "dependencies": {
     "react": "^19.2.4",
