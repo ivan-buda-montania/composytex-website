@@ -63,7 +63,7 @@ export default function Navbar() {
       <nav className="navbar">
         <div className="logo-area">
           <Link to="/">
-            <img src="/assets/composytex-logo.png" alt="Composytex" />
+            <img src="/assets/composytex-logo.svg" alt="Composytex" width="224" height="42" />
           </Link>
         </div>
 

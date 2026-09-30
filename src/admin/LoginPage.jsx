@@ -60,7 +60,7 @@ export default function LoginPage({ onSignedIn }) {
   return (
     <div className="adm-center">
       <div className="adm-card adm-login">
-        <img src="/assets/composytex-logo.png" alt="Composytex" className="adm-login-logo" />
+        <img src="/assets/composytex-logo.svg" alt="Composytex" className="adm-login-logo" />
         <h1>Administración del catálogo</h1>
 
         {info && <div className="adm-alert adm-alert-ok">{info}</div>}

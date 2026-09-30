@@ -71,7 +71,7 @@ export default function AdminApp() {
     <div className="adm">
       <header className="adm-header">
         <div className="adm-brand">
-          <img src="/assets/composytex-mini-logo.png" alt="" />
+          <img src="/assets/composytex-mark.svg" alt="" />
           <span>Catálogo Composytex</span>
         </div>
         <div className="adm-header-actions">

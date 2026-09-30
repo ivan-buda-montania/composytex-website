@@ -7,7 +7,7 @@ export default function Footer() {
     <footer className="footer-main">
       <div className="footer-grid">
         <div className="footer-brand footer-col">
-          <img src="/assets/composytex-logo.png" alt="Composytex" style={{ height: 38, filter: 'brightness(0) invert(1)', opacity: 0.8 }} />
+          <img src="/assets/composytex-logo.svg" alt="Composytex" style={{ height: 38, filter: 'brightness(0) invert(1)', opacity: 0.8 }} />
           <p>{t('footer.description')}</p>
         </div>
 
