@@ -28,7 +28,9 @@ composytex.com ── CloudFront ──┬─ /*                  → S3 site bu
 
 There are no AWS keys in GitHub. The workflow assumes `composytex-github-deploy` through OIDC.
 Only jobs running in this repo's `production` environment can do that, and that environment
-only accepts `main`. The role can sync the site (it's explicitly denied `data/*` and `media/*`),
+only accepts `main`. The trust policy matches GitHub's immutable subject for this repo
+(`repo:ivan-buda-montania@257895885/composytex-website@1397215774:environment:production`),
+so a renamed or recreated repo can't use the role. The role can sync the site (it's explicitly denied `data/*` and `media/*`),
 clear the CloudFront cache, and ask CloudFormation to update `composytex-admin` using
 `composytex-cfn-exec`, the role that actually changes Lambda, API, Cognito, etc. Both roles are
 defined in `infra/github-actions.yaml`. The admin user pool has `DeletionPolicy: Retain`, so

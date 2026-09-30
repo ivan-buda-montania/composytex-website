@@ -4,9 +4,12 @@ Description: >
   composytex-admin stack. Deploy once by hand (see infra/README.md); no AWS keys live in GitHub.
 
 Parameters:
-  GitHubRepo:
+  # The repo uses GitHub's immutable OIDC subject (owner@id/repo@id), which survives
+  # renames and can't be claimed by a recreated repo. Check with:
+  #   gh api repos/ivan-buda-montania/composytex-website/actions/oidc/customization/sub
+  GitHubSubjectPrefix:
     Type: String
-    Default: ivan-buda-montania/composytex-website
+    Default: repo:ivan-buda-montania@257895885/composytex-website@1397215774
   GitHubEnvironment:
     Type: String
     Default: production
@@ -41,7 +44,7 @@ Resources:
             Condition:
               StringEquals:
                 token.actions.githubusercontent.com:aud: sts.amazonaws.com
-                token.actions.githubusercontent.com:sub: !Sub repo:${GitHubRepo}:environment:${GitHubEnvironment}
+                token.actions.githubusercontent.com:sub: !Sub ${GitHubSubjectPrefix}:environment:${GitHubEnvironment}
       Policies:
         - PolicyName: deploy-site
           PolicyDocument:
