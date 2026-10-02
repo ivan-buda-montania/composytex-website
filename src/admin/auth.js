@@ -4,7 +4,7 @@ const STORAGE_KEY = 'composytex-admin-session';
 const ERROR_MESSAGES = {
   NotAuthorizedException: 'Correo o contraseña incorrectos.',
   UserNotFoundException: 'Correo o contraseña incorrectos.',
-  InvalidPasswordException: 'La contraseña debe tener al menos 12 caracteres, con mayúsculas, minúsculas y números.',
+  InvalidPasswordException: 'La contraseña debe tener al menos 10 caracteres, con mayúsculas, minúsculas y números.',
   CodeMismatchException: 'El código es incorrecto.',
   ExpiredCodeException: 'El código expiró. Solicita uno nuevo.',
   LimitExceededException: 'Demasiados intentos. Espera unos minutos.',

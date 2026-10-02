@@ -87,8 +87,8 @@ export default function LoginPage({ onSignedIn }) {
           <form onSubmit={setFirstPassword}>
             <label className="adm-field">
               <span>Contraseña nueva</span>
-              <input type="password" autoComplete="new-password" required minLength={12} value={newPassword} onChange={e => setNewPassword(e.target.value)} />
-              <small>Mínimo 12 caracteres, con mayúsculas, minúsculas y números.</small>
+              <input type="password" autoComplete="new-password" required minLength={10} value={newPassword} onChange={e => setNewPassword(e.target.value)} />
+              <small>Mínimo 10 caracteres, con mayúsculas, minúsculas y números.</small>
             </label>
             <button className="adm-btn adm-btn-primary adm-btn-block" disabled={busy}>
               {busy ? 'Guardando…' : 'Guardar y entrar'}
@@ -117,8 +117,8 @@ export default function LoginPage({ onSignedIn }) {
             </label>
             <label className="adm-field">
               <span>Contraseña nueva</span>
-              <input type="password" autoComplete="new-password" required minLength={12} value={newPassword} onChange={e => setNewPassword(e.target.value)} />
-              <small>Mínimo 12 caracteres, con mayúsculas, minúsculas y números.</small>
+              <input type="password" autoComplete="new-password" required minLength={10} value={newPassword} onChange={e => setNewPassword(e.target.value)} />
+              <small>Mínimo 10 caracteres, con mayúsculas, minúsculas y números.</small>
             </label>
             <button className="adm-btn adm-btn-primary adm-btn-block" disabled={busy}>
               {busy ? 'Guardando…' : 'Cambiar contraseña'}

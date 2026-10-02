@@ -114,7 +114,7 @@ function passwordHint(sent) {
   return `(${notes.join('; ')})`;
 }
 
-const passwordOk = p => p.length >= 12 && /[a-z]/.test(p) && /[A-Z]/.test(p) && /\d/.test(p);
+const passwordOk = p => p.length >= 10 && /[a-z]/.test(p) && /[A-Z]/.test(p) && /\d/.test(p);
 
 function issueTokens(email, withRefresh = true) {
   const idToken = randomBytes(24).toString('hex');
