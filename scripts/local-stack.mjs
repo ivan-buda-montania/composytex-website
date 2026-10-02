@@ -19,6 +19,9 @@ import { CloudFrontClient } from '@aws-sdk/client-cloudfront';
 import { TranslateClient } from '@aws-sdk/client-translate';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
+// Optional, gitignored overrides: LOCAL_ADMIN_EMAIL, LOCAL_ADMIN_PASSWORD, LOCAL_API_PORT.
+const LOCAL_ENV = join(ROOT, '.env.localstack.local');
+if (existsSync(LOCAL_ENV)) process.loadEnvFile(LOCAL_ENV);
 const STATE_DIR = join(ROOT, '.local-stack');
 const AUTH_FILE = join(STATE_DIR, 'auth.json');
 const API_PORT = Number(process.env.LOCAL_API_PORT || 8787);

@@ -1,7 +1,7 @@
 import { lazy, Suspense } from 'react';
 import { BrowserRouter, Routes, Route, Outlet } from 'react-router-dom';
-import { LanguageProvider } from './context/LanguageContext';
-import { CatalogProvider } from './context/CatalogContext';
+import { LanguageProvider } from './context/LanguageContext.jsx';
+import { CatalogProvider } from './context/CatalogContext.jsx';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import HomePage from './pages/HomePage';
