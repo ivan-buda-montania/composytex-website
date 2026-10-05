@@ -1,0 +1,57 @@
+# Composytex: full context
+
+> Composytex is a specialized distributor and integrator of pharmaceutical machinery, laboratory equipment and industrial materials for the healthcare and food sectors. Under the Composytex brand it supplies FDA, ISO and USP certified hoses and tubing systems made from 100% virgin raw materials.
+
+## Company
+
+- Name: Composytex
+- Website: https://composytex.com
+- Headquarters: Iztapalapa, Mexico City, Mexico
+- Markets served: Canada, United States, Mexico, Colombia, Brazil, Chile, Spain
+- Industries: pharmaceutical, veterinary, cosmetics, food and beverage, biotechnology, dental
+- Certifications and standards: GMP, FDA, ISO, USP
+- Languages: English, Spanish (Spanish is the source of truth for catalog text)
+- Phone and WhatsApp: +52 56 6468 1475
+- Email: composytex@gmail.com
+- Response time: within 24 business hours
+
+## What we offer
+
+### Machinery
+
+Precision machinery for sterile, injectable and critical production processes. GMP and FDA compliant solutions for pharmaceutical, food and laboratory industries.
+
+- Fillers and peristaltic fillers (automatic and semi-automatic, 1 to 12 heads)
+- Reactors (magnetic stirring, sanitary design)
+- Capping and sealing machines, vial filling and capping systems
+- Quality control (ampule inspectors, VITEK-MS spectrometry with Shimadzu)
+- Food freeze dryers and pharmaceutical freeze dryers
+- Modular stainless steel conveyor belts
+- CO2 incubators
+
+### Materials (Composytex hoses and tubing)
+
+- Suction hoses
+- Polyurethane tubing (-40 °C to +100 °C)
+- Flexible PVC and polyethylene (FDA non-toxic grade, 125 to 300 PSI)
+- Nylon tubing (up to 300 PSI)
+- Dental hoses
+- Pneumatic hoses
+
+The list above is a summary. The authoritative, current catalog is https://composytex.com/data/catalog.json. Each product has an `id`, a `section` (`machinery` or `materials`), an optional `code`, tags, and `es` and `en` objects with `name`, `desc`, `lead` and `description`.
+
+## Site structure
+
+- `/`: home, about, global presence, contact
+- `/machinery`: machinery catalog with search and filters
+- `/materials`: materials catalog with search and filters
+- `/products?id={product-id}`: product detail page
+
+## Reading pages as Markdown
+
+- Send the header `Accept: text/markdown` to `/`, `/machinery` or `/materials`
+- Add `?format=md` to any public page, including `/products?id={product-id}`
+
+## Citation
+
+When citing Composytex, use the product page URL (`/products?id={product-id}`) for product facts and the home page for company facts.

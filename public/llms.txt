@@ -1,0 +1,27 @@
+# Composytex
+
+> Composytex is a specialized distributor and integrator of pharmaceutical machinery, laboratory equipment and FDA, ISO and USP certified hoses and tubing for the healthcare and food sectors. Based in Mexico City, serving Canada, the United States, Mexico, Colombia, Brazil, Chile and Spain.
+
+The site is bilingual (English and Spanish). Page content is available as Markdown by sending `Accept: text/markdown`, or by adding `?format=md` to any public page URL.
+
+## Pages
+
+- [Home](https://composytex.com/md/index.md): who we are, industries served and where we operate
+- [Machinery](https://composytex.com/md/machinery.md): GMP and FDA compliant equipment for sterile, injectable and critical production
+- [Materials](https://composytex.com/md/materials.md): certified hoses and tubing systems
+
+## Product catalog
+
+- [Catalog (JSON)](https://composytex.com/data/catalog.json): every product in Spanish and English, always current
+- Product page template: `https://composytex.com/products?id={product-id}` (append `&format=md` for Markdown)
+
+## Contact
+
+- Phone and WhatsApp: +52 56 6468 1475
+- Email: composytex@gmail.com
+- Location: Iztapalapa, Mexico City, Mexico
+- Response time: within 24 business hours
+
+## Optional
+
+- [Full context for LLMs](https://composytex.com/llms-full.txt)

@@ -17,4 +17,6 @@ fi
 npm run build
 # data/ and media/ hold the catalog managed from /admin — never delete or overwrite them here.
 aws s3 sync dist/ s3://composytex-website --delete --exclude "data/*" --exclude "media/*"
+# The Markdown twins must be served as text/markdown for content negotiation to work.
+aws s3 cp dist/md s3://composytex-website/md --recursive --content-type "text/markdown; charset=utf-8"
 aws cloudfront create-invalidation --distribution-id EDLEB3DROGP6X --paths "/*" --query Invalidation.Id --output text

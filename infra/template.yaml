@@ -165,11 +165,20 @@ Resources:
       Name: composytex-spa-rewrite
       AutoPublish: true
       FunctionConfig:
-        Comment: Rewrite client-side routes to /index.html
+        Comment: Rewrite client-side routes to /index.html, and serve Markdown to Accept text/markdown
         Runtime: cloudfront-js-2.0
       FunctionCode: |
+        // Pages with a static Markdown twin under /md/ (emitted by the markdownPages plugin in vite.config.js).
+        var MARKDOWN = { '/': '/md/index.md', '/machinery': '/md/machinery.md', '/materials': '/md/materials.md' };
+
         function handler(event) {
           var req = event.request;
+          var accept = req.headers.accept ? req.headers.accept.value : '';
+          var page = req.uri.replace(/\/$/, '') || '/';
+          if (accept.indexOf('text/markdown') !== -1 && MARKDOWN[page]) {
+            req.uri = MARKDOWN[page];
+            return req;
+          }
           var last = req.uri.split('/').pop();
           if (last.indexOf('.') === -1) req.uri = '/index.html';
           return req;

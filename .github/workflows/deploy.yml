@@ -87,6 +87,9 @@ jobs:
             echo "$path → $code"
             [ "$code" = 200 ]
           done
+          type=$(curl -s -o /dev/null -w '%{content_type}' -H 'Accept: text/markdown' https://composytex.com/machinery)
+          echo "/machinery as Markdown → $type"
+          [[ "$type" == text/markdown* ]]
           api=$(grep VITE_API_URL .env.production | cut -d= -f2)
           code=$(curl -s -o /dev/null -w '%{http_code}' "$api/catalog")
           echo "API without login → $code"

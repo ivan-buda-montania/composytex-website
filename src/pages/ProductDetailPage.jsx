@@ -3,7 +3,9 @@ import { useSearchParams, Link } from 'react-router-dom';
 import { useLanguage } from '../context/languageContext';
 import { useCatalog } from '../context/catalogContext';
 import { localize, TAG_KEYS } from '../lib/catalog';
+import { SITE_URL } from '../lib/site';
 import { PHONE, EMAIL } from '../data/contact';
+import SchemaInjector from '../components/SchemaInjector';
 
 export default function ProductDetailPage() {
   const { t, lang } = useLanguage();
@@ -49,9 +51,24 @@ export default function ProductDetailPage() {
   const waLink = `https://wa.me/${PHONE}?text=${waText}`;
   const mailSub = encodeURIComponent(t('productDetail.emailSubject').replace('{product}', product.name));
   const mailBody = encodeURIComponent(t('productDetail.emailBody').replace('{product}', product.name));
+  const canonicalUrl = `${SITE_URL}/products?id=${id}`;
 
   return (
     <>
+      <meta name="description" content={product.lead} />
+      <link rel="canonical" href={canonicalUrl} />
+      <SchemaInjector
+        type="Product"
+        data={{
+          name: product.name,
+          description: product.lead,
+          category,
+          url: canonicalUrl,
+          ...(product.code && { sku: product.code }),
+          ...(product.image && { image: new URL(product.image, SITE_URL).href }),
+        }}
+      />
+
       {/* Breadcrumb */}
       <div style={{ maxWidth: 1100, margin: '0 auto', padding: '1.2rem 3rem 0', display: 'flex', alignItems: 'center', gap: '0.6rem', fontSize: '0.85rem', color: 'var(--muted)' }}>
         <Link to="/" style={{ color: 'var(--blue)', textDecoration: 'none', fontWeight: 600 }}>{t('breadcrumb.home')}</Link>
