@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { useLanguage } from '../context/languageContext';
+import { PHONE } from '../data/contact';
 
 export default function Footer() {
   const { t } = useLanguage();
@@ -26,7 +27,7 @@ export default function Footer() {
 
         <div className="footer-col">
           <h4>{t('footer.contactInfo')}</h4>
-          <a href="tel:+525516937705">{t('common.phone')}</a>
+          <a href={`tel:+${PHONE}`}>{t('common.phone')}</a>
           <a href="mailto:composytex@gmail.com">{t('footer.email')}</a>
           <p>{t('common.location')}</p>
         </div>

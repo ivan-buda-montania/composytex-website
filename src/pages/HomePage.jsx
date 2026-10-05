@@ -3,6 +3,7 @@ import { useLanguage } from '../context/languageContext';
 import { useCatalog } from '../context/catalogContext';
 import ServiceCard from '../components/ServiceCard';
 import PresenceMap from '../components/PresenceMap';
+import { PHONE } from '../data/contact';
 
 export default function HomePage() {
   const { t } = useLanguage();
@@ -156,7 +157,7 @@ export default function HomePage() {
           {t('cta.description')}
         </p>
         <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem', flexWrap: 'wrap' }}>
-          <a href="https://wa.me/525516937705?text=Hello%2C%20I%20need%20information%20about%20your%20products." target="_blank" rel="noopener noreferrer" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.6rem', background: '#25d366', color: '#fff', fontWeight: 700, fontSize: '1rem', padding: '0.9rem 2.2rem', borderRadius: 50, textDecoration: 'none', boxShadow: '0 8px 24px rgba(37,211,102,0.4)' }}>
+          <a href={`https://wa.me/${PHONE}?text=Hello%2C%20I%20need%20information%20about%20your%20products.`} target="_blank" rel="noopener noreferrer" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.6rem', background: '#25d366', color: '#fff', fontWeight: 700, fontSize: '1rem', padding: '0.9rem 2.2rem', borderRadius: 50, textDecoration: 'none', boxShadow: '0 8px 24px rgba(37,211,102,0.4)' }}>
             <i className="fab fa-whatsapp"></i> WhatsApp
           </a>
           <a href="mailto:composytex@gmail.com" className="btn-ghost">
@@ -173,8 +174,8 @@ export default function HomePage() {
             <h2 className="section-title">{t('contact.title')}</h2>
             <p className="section-sub" style={{ marginBottom: '2rem' }}>{t('contact.description')}</p>
             {[
-              ['fas fa-phone-alt', '+52 56 6468 1475', 'tel:+525516937705'],
-              ['fab fa-whatsapp', 'WhatsApp', 'https://wa.me/525516937705'],
+              ['fas fa-phone-alt', '+52 56 6468 1475', `tel:+${PHONE}`],
+              ['fab fa-whatsapp', 'WhatsApp', `https://wa.me/${PHONE}`],
               ['fas fa-envelope', 'composytex@gmail.com', 'mailto:composytex@gmail.com'],
               ['fas fa-map-marker-alt', 'Iztapalapa, Mexico City', null],
             ].map(([icon, text, href]) => (
