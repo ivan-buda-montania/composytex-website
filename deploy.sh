@@ -8,9 +8,10 @@ if [[ -z "${CI:-}" ]]; then
 fi
 export AWS_REGION=us-east-1
 
+# The deploy profile can't read CloudFormation, so the stack outputs come from the montania profile.
 if [[ ! -f .env.production ]]; then
-  echo "Missing .env.production (run scripts/write-env.sh or copy .env.example)." >&2
-  exit 1
+  echo "==> .env.production missing, generating it from the composytex-admin stack..."
+  AWS_PROFILE=montania scripts/write-env.sh
 fi
 
 npm run build

@@ -8,8 +8,11 @@ REGION=us-east-1
 cd "$(dirname "$0")/.."
 
 output() {
-  aws cloudformation describe-stacks --region "$REGION" --stack-name "$STACK" \
-    --query "Stacks[0].Outputs[?OutputKey=='$1'].OutputValue" --output text
+  local value
+  value=$(aws cloudformation describe-stacks --region "$REGION" --stack-name "$STACK" \
+    --query "Stacks[0].Outputs[?OutputKey=='$1'].OutputValue" --output text)
+  [[ -n "$value" && "$value" != None ]] || { echo "Stack output $1 is empty" >&2; exit 1; }
+  echo "$value"
 }
 
 cat > .env.production <<ENV
