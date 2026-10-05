@@ -768,3 +768,38 @@ a {
 @supports (-webkit-touch-callout: none) {
   .page-hero { background-attachment: scroll !important; }
 }
+
+/* ── Global presence map ── */
+.presence-grid { display: grid; grid-template-columns: 1.4fr 1fr; gap: 2.5rem; align-items: center; }
+.presence-map { display: block; width: 100%; height: auto; max-height: 620px; }
+.presence-map path { fill: #d3e3ef; stroke: var(--bg); stroke-width: 0.7; stroke-linejoin: round; transition: fill 0.2s; }
+.presence-map path.served { fill: var(--blue); cursor: pointer; }
+.presence-map path.served.active { fill: var(--navy); }
+.presence-marker circle { fill: #fff; stroke: var(--navy); stroke-width: 2; pointer-events: none; }
+.presence-marker .presence-pulse { fill: none; stroke: var(--navy); stroke-width: 2; transform-box: fill-box; transform-origin: center; animation: presencePulse 2.2s ease-out infinite; }
+@keyframes presencePulse {
+  from { transform: scale(1); opacity: 0.9; }
+  to   { transform: scale(3); opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) { .presence-marker .presence-pulse { animation: none; } }
+.presence-list { list-style: none; display: flex; flex-direction: column; gap: 0.75rem; padding: 0; margin: 0; }
+.presence-list li {
+  display: flex; align-items: center; gap: 1rem;
+  background: #fff; border: 1px solid #dce9f4; border-radius: 16px; padding: 0.9rem 1.2rem;
+  transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+}
+.presence-list li.active { border-color: var(--blue); box-shadow: 0 8px 24px rgba(0,119,182,0.15); transform: translateX(4px); }
+.presence-dot { width: 12px; height: 12px; border-radius: 50%; background: var(--blue); box-shadow: 0 0 0 3px rgba(0,119,182,0.2); flex-shrink: 0; }
+.presence-hq {
+  font-size: 0.72rem; font-weight: 700; color: #fff; background: var(--navy);
+  padding: 0.25rem 0.75rem; border-radius: 20px; white-space: nowrap;
+}
+@media (max-width: 900px) {
+  .presence-grid { grid-template-columns: 1fr; gap: 1.5rem; }
+  .presence-map { max-height: 520px; }
+  .presence-list { display: grid; grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 600px) {
+  .presence-list { grid-template-columns: 1fr; gap: 0.6rem; }
+  .presence-list li { padding: 0.75rem 1rem; }
+}

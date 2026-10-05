@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { useLanguage } from '../context/languageContext';
 import { useCatalog } from '../context/catalogContext';
 import ServiceCard from '../components/ServiceCard';
+import PresenceMap from '../components/PresenceMap';
 
 export default function HomePage() {
   const { t } = useLanguage();
@@ -100,20 +101,7 @@ export default function HomePage() {
             <span className="section-label">{t('globalPresence.label')}</span>
             <h2 className="section-title">{t('globalPresence.title')}</h2>
           </div>
-          <div className="grid-2col-auto" style={{margin: '0'}}>
-            {[
-              { flag: '🇺🇸', countryKey: 'usa' },
-              { flag: '🇲🇽', countryKey: 'mexico' },
-              { flag: '🇨🇴', countryKey: 'colombia' },
-            ].map(({ flag, countryKey }) => (
-              <div key={countryKey} style={{ background: '#fff', border: '1px solid #dce9f4', borderRadius: 20, padding: '2rem', textAlign: 'center', transition: 'transform 0.2s, box-shadow 0.2s', cursor: 'pointer' }}>
-                <div style={{ fontSize: '4rem', marginBottom: '1rem' }}>{flag}</div>
-                <h3 style={{ fontSize: '1.3rem', fontWeight: 800, color: 'var(--navy)', marginBottom: '0.4rem' }}>{t(`globalPresence.${countryKey}.country`)}</h3>
-                <p style={{ fontSize: '0.85rem', color: 'var(--blue)', fontWeight: 600, letterSpacing: '0.5px', marginBottom: '0.8rem' }}>{t(`globalPresence.${countryKey}.region`)}</p>
-                <p style={{ fontSize: '0.9rem', color: 'var(--muted)', lineHeight: 1.6 }}>{t(`globalPresence.${countryKey}.desc`)}</p>
-              </div>
-            ))}
-          </div>
+          <PresenceMap />
         </div>
       </div>
 

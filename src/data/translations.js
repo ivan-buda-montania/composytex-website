@@ -6,8 +6,7 @@ export const translations = {
       products: 'Products',
       machinery: 'Machinery',
       materials: 'Materials',
-      contact: 'Contact',
-      phone: '+52 56 6468 1475',
+      contact: 'Contact Us',
     },
     hero: {
       badge: 'GMP · FDA · ISO Certified',
@@ -41,21 +40,36 @@ export const translations = {
     },
     globalPresence: {
       label: 'Global Presence',
-      title: 'We Serve Three Key Markets',
+      title: 'We Serve Seven Key Markets',
+      mapLabel: 'Map of the Americas and Spain highlighting Canada, the United States, Mexico, Colombia, Brazil, Chile, and Spain',
+      hq: 'Headquarters',
+      canada: {
+        country: 'Canada',
+        region: 'North America',
+      },
       usa: {
         country: 'United States',
         region: 'North America',
-        desc: 'Serving pharmaceutical and food industries across the US market.',
       },
       mexico: {
         country: 'Mexico',
-        region: 'Latin America',
-        desc: 'Headquarters and primary operations in Mexico City.',
+        region: 'North America',
       },
       colombia: {
         country: 'Colombia',
         region: 'South America',
-        desc: 'Growing presence supporting Andean region healthcare sector.',
+      },
+      brazil: {
+        country: 'Brazil',
+        region: 'South America',
+      },
+      chile: {
+        country: 'Chile',
+        region: 'South America',
+      },
+      spain: {
+        country: 'Spain',
+        region: 'Europe',
       },
     },
     machinery: {
@@ -178,8 +192,7 @@ export const translations = {
       products: 'Productos',
       machinery: 'Maquinaria',
       materials: 'Materiales',
-      contact: 'Contacto',
-      phone: '+52 56 6468 1475',
+      contact: 'Contáctanos',
     },
     hero: {
       badge: 'GMP · FDA · ISO Certificado',
@@ -213,21 +226,36 @@ export const translations = {
     },
     globalPresence: {
       label: 'Presencia Global',
-      title: 'Servimos Tres Mercados Clave',
+      title: 'Servimos Siete Mercados Clave',
+      mapLabel: 'Mapa del continente americano y España que resalta Canadá, Estados Unidos, México, Colombia, Brasil, Chile y España',
+      hq: 'Sede Central',
+      canada: {
+        country: 'Canadá',
+        region: 'América del Norte',
+      },
       usa: {
         country: 'Estados Unidos',
         region: 'América del Norte',
-        desc: 'Sirviendo industrias farmacéuticas y alimentarias en el mercado estadounidense.',
       },
       mexico: {
         country: 'México',
-        region: 'América Latina',
-        desc: 'Sede central y operaciones principales en Ciudad de México.',
+        region: 'América del Norte',
       },
       colombia: {
         country: 'Colombia',
         region: 'América del Sur',
-        desc: 'Presencia en crecimiento apoyando el sector de salud de la región andina.',
+      },
+      brazil: {
+        country: 'Brasil',
+        region: 'América del Sur',
+      },
+      chile: {
+        country: 'Chile',
+        region: 'América del Sur',
+      },
+      spain: {
+        country: 'España',
+        region: 'Europa',
       },
     },
     machinery: {

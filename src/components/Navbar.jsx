@@ -87,8 +87,6 @@ export default function Navbar() {
             </div>
           </div>
 
-          <a href="#contact" onClick={handleAnchorClick('#contact')} className="nav-link">{t('nav.contact')}</a>
-
           <button
             onClick={toggleLanguage}
             className="lang-toggle"
@@ -96,8 +94,8 @@ export default function Navbar() {
             {lang.toUpperCase()}
           </button>
 
-          <a href="tel:+525516937705" className="nav-cta">
-            <i className="fas fa-phone-alt"></i> {t('nav.phone')}
+          <a href="#contact" onClick={handleAnchorClick('#contact')} className="nav-cta">
+            <i className="fas fa-envelope"></i> {t('nav.contact')}
           </a>
         </div>
 
@@ -145,11 +143,8 @@ export default function Navbar() {
               <i className="fas fa-cubes"></i> {t('nav.materials')}
             </Link>
           </div>
-          <a href="#contact" className="mobile-link" onClick={handleAnchorClick('#contact')}>
+          <a href="#contact" onClick={handleAnchorClick('#contact')} className="mobile-cta">
             <i className="fas fa-envelope"></i> {t('nav.contact')}
-          </a>
-          <a href="tel:+525516937705" className="mobile-cta">
-            <i className="fas fa-phone-alt"></i> {t('nav.phone')}
           </a>
         </div>
       </div>
